@@ -14,10 +14,11 @@
 			opacity: 1;
 		}
 	</style>
-	<link rel="stylesheet" href="css/style.min.css?_v=20241215172318">
+	<link rel="stylesheet" href="css/style.min.css?_v=20241219181831">
 	<link rel="shortcut icon" href="favicon.ico">
 	<!-- <meta name="robots" content="noindex, nofollow"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://telegram.org/js/telegram-web-app.js?_v=20241219181831"></script>
 </head>
 
 <body>
@@ -27,49 +28,59 @@
 				<div class="app__wrapper">
 					<div class="app__header header-app">
 						<div class="header-app__container">
-							<div class="header-app__content">
-								<div class="header-app__logo min-w-20 w-20 min-h-20 h-20 rounded bg-[#c7ffd8] inline-flex items-center justify-center">
-									<img src="img/type-one/logo.webp" alt="Logo">
-								</div>
-								<div class="flex items-center gap-24">
-									<div class="header-app__trade flex items-center gap-3">
-										<p class="md:text-xl text-lg font-medium text-left text-white">
-											TON: $6.97+5.7% 24h
-										</p>
-										<div class="header-app__trade-image bg-white rounded-full w-14 h-14">
-											<img src="img/type-one/logo.webp" class="object-contain w-full h-full" alt="Image">
+							<div class="header-app__wrapper">
+								<div class="header-app__content">
+									<div class="header-app__logo rounded bg-[#c7ffd8] inline-flex items-center justify-center">
+										<img src="" alt="Logo">
+									</div>
+									<div class="flex items-center md:gap-24 sm:gap-10 gap-4">
+										<div class="header-app__trade flex items-center gap-3">
+											<p class="font-medium text-left text-white">
+												TON: $6.97+5.7% 24h
+											</p>
+											<div class="header-app__trade-image bg-white rounded-full w-14 h-14">
+												<img src="" class="object-contain w-full h-full" alt="Image">
+											</div>
+										</div>
+										<div class="header-app__actions lg:flex hidden items-center gap-4">
+											<a href="#" class="button button-secondary">
+												<span>Add token</span>
+											</a>
+											<a href="#" class="button button-primary">
+												<span>Buy token</span>
+											</a>
+										</div>
+										<div class="header-app__socials">
+											<ul class="flex items-center gap-5">
+												<li>
+													<a href="#" target="_blank">
+														<svg width="52" height="46" viewBox="0 0 52 46" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+															<path d="M22.22 29.6275L34.125 45.5H51.625L31.98 19.305L48.325 0.5H41.7L28.9075 15.215L17.875 0.5H0.375L19.15 25.5375L1.8 45.5H8.425L22.22 29.6275ZM36.625 40.5L10.375 5.5H15.375L41.625 40.5H36.625Z" fill="#C7FFD8"></path>
+														</svg>
+													</a>
+												</li>
+												<li>
+													<a href="#" target="_blank">
+														<svg width="52" height="42" viewBox="0 0 52 42" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[47.5px] h-[37.5px]" preserveAspectRatio="none">
+															<path d="M43.25 40L49.5 2.5L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+															<path d="M49.5 2.5L2 21.25" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+															<path d="M43.25 40L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+															<path d="M2 21.25L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+															<path d="M27 30L19.5 37.5V23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+														</svg>
+													</a>
+												</li>
+											</ul>
 										</div>
 									</div>
-									<div class="header-app__actions flex items-center gap-4">
-										<a href="#" class="button button-secondary">
-											<span>Add token</span>
-										</a>
-										<a href="#" class="button button-primary">
-											<span>Buy token</span>
-										</a>
-									</div>
-									<div class="header-app__socials">
-										<ul class="flex items-center gap-5">
-											<li>
-												<a href="#" target="_blank">
-													<svg width="52" height="46" viewBox="0 0 52 46" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-														<path d="M22.22 29.6275L34.125 45.5H51.625L31.98 19.305L48.325 0.5H41.7L28.9075 15.215L17.875 0.5H0.375L19.15 25.5375L1.8 45.5H8.425L22.22 29.6275ZM36.625 40.5L10.375 5.5H15.375L41.625 40.5H36.625Z" fill="#C7FFD8"></path>
-													</svg>
-												</a>
-											</li>
-											<li>
-												<a href="#" target="_blank">
-													<svg width="52" height="42" viewBox="0 0 52 42" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[47.5px] h-[37.5px]" preserveAspectRatio="none">
-														<path d="M43.25 40L49.5 2.5L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-														<path d="M49.5 2.5L2 21.25" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-														<path d="M43.25 40L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-														<path d="M2 21.25L19.5 23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-														<path d="M27 30L19.5 37.5V23.75" stroke="#C7FFD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-													</svg>
-												</a>
-											</li>
-										</ul>
-									</div>
+								</div>
+								<div class="header-app__actions lg:hidden flex justify-center items-center gap-4">
+									<a href="#" class="button button-secondary">
+										<span>Add token</span>
+									</a>
+									<a href="#" class="button button-primary">
+										<span>Buy token</span>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -109,18 +120,27 @@
 								<p>Until Putin`s death <span class="text-[#C7FFD8]">XXXXXX</span> % </p>
 								<h1>Kill him!</h1>
 							</div>
-							<div class="body-app__picture picture">
-								<div class="picture__image">
-									<img src="img/type-one/default.webp" alt="Image Chuj">
+
+							<div class="relative w-full flex items-center justify-center gap-4">
+								<div class="body-app__picture picture w-fit">
+									<div class="picture__image">
+										<img src="" alt="Image Chuj">
+									</div>
+									<div class="picture__cursor">
+										<img src="img/cursor.png" alt="cursor">
+									</div>
+
+
 								</div>
-								<div class="picture__cursor">
-									<img src="img/cursor.webp" alt="cursor">
-								</div>
+								<button type="button" class="sound-button">
+									<img src="img/charm_sound-down.svg" alt="Sound types">
+								</button>
 							</div>
 							<div class="body-app__tokens-info tokens-info">
 								<p>You have <span>XXXXXX</span> tokens</p>
 								<span>*You have only <b>10 kills/day</b></span>
 							</div>
+
 						</div>
 					</div>
 					<!-- /.app__content content-app -->
@@ -130,7 +150,10 @@
 			<!-- /.my-app -->
 		</main>
 	</div>
-	<script src="js/app.min.js?_v=20241215172318"></script>
+	<script>
+		Telegram.WebApp.ready();
+	</script>
+	<script src="js/app.min.js?_v=20241219181831"></script>
 </body>
 
 </html>
