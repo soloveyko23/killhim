@@ -107,7 +107,7 @@
         if (soundButton) soundButton.addEventListener("click", (() => {
             soundMuted = !soundMuted;
             const soundIcon = soundMuted ? "charm_sound-mute.svg" : "charm_sound-down.svg";
-            createOrUpdateImage(`../img/${soundIcon}`, ".sound-button");
+            createOrUpdateImage(`./img/${soundIcon}`, ".sound-button");
         }));
     };
     const playSound = soundPath => {
@@ -146,7 +146,7 @@
                         cursor.style.left = `${x - cursor.offsetWidth / 2}px`;
                         cursor.style.top = `${y - cursor.offsetHeight / 2}px`;
                     }
-                    playSound("../img/sounds/shot.mp3");
+                    playSound("./img/sounds/shot.mp3");
                     const img = picture.querySelector(".picture__image img");
                     if (img) img.src = imagePaths[lastType].die;
                     shotsRemaining -= 1;
@@ -167,7 +167,7 @@
                         picture.style.cursor = "none";
                         const img = picture.querySelector(".picture__image img");
                         if (img) img.src = imagePaths[lastType].fright;
-                        playSound("../img/sounds/ispugannoe-dyihanie.mp3");
+                        playSound("./img/sounds/ispugannoe-dyihanie.mp3");
                     }
                 }));
                 picture.addEventListener("mouseleave", (() => {
