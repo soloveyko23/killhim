@@ -535,8 +535,7 @@ html {
   min-width: 0
 }
 [class*=__container] {
-  margin: 0 auto;
-  padding: 0 min(2vmin,2vmax)
+  margin: 0 auto
 }
 [class*="--gc"] {
   display: grid;
@@ -620,6 +619,54 @@ html {
 }
 .button.button-primary:active {
   background-color: #61ff91
+}
+.shake {
+  -webkit-animation: shake .2s infinite;
+  animation: shake .2s infinite
+}
+@-webkit-keyframes shake {
+  0% {
+    -webkit-transform: translate(0,0);
+    transform: translate(0,0)
+  }
+  25% {
+    -webkit-transform: translate(-2px,2px);
+    transform: translate(-2px,2px)
+  }
+  50% {
+    -webkit-transform: translate(2px,-2px);
+    transform: translate(2px,-2px)
+  }
+  75% {
+    -webkit-transform: translate(-2px,-2px);
+    transform: translate(-2px,-2px)
+  }
+  100% {
+    -webkit-transform: translate(2px,2px);
+    transform: translate(2px,2px)
+  }
+}
+@keyframes shake {
+  0% {
+    -webkit-transform: translate(0,0);
+    transform: translate(0,0)
+  }
+  25% {
+    -webkit-transform: translate(-2px,2px);
+    transform: translate(-2px,2px)
+  }
+  50% {
+    -webkit-transform: translate(2px,-2px);
+    transform: translate(2px,-2px)
+  }
+  75% {
+    -webkit-transform: translate(-2px,-2px);
+    transform: translate(-2px,-2px)
+  }
+  100% {
+    -webkit-transform: translate(2px,2px);
+    transform: translate(2px,2px)
+  }
 }
 * {
   -webkit-user-select: none;
@@ -718,27 +765,29 @@ html {
 .app__body .body-app__picture {
   position: relative;
   border-radius: 1.375rem;
-  overflow: hidden
+  overflow: hidden;
+  cursor: none
+}
+.app__body .body-app__picture .picture__blood {
+  position: absolute
 }
 .app__body .body-app__picture .picture__cursor {
-  display: none;
   position: absolute;
-  top: 0
-}
-.app__body .body-app__picture .picture__cursor img {
-  min-width: min(30vmin,40vmax);
-  width: min(30vmin,40vmax);
-  height: min(30vmin,40vmax)
+  top: 0;
+  opacity: 0
 }
 .app__body .body-app__picture .picture__image {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center
+  background-color: #fff;
+  justify-content: center;
+  border-radius: 1.375rem
 }
 .app__body .body-app__picture .picture__image img {
   border-radius: 1.375rem;
-  width: 100%
+  -o-object-fit: contain;
+  object-fit: contain
 }
 .app__body .body-app__tokens-info p {
   font-weight: 600;
@@ -777,6 +826,9 @@ html {
   background-color: #61ff91
 }
 @media (min-width:31.24875em) {
+  [class*=__container] {
+    padding: 0 min(2vmin,2vmax)
+  }
   .button {
     min-width: min(12vmin,20vmax);
     min-height: min(4vmin,10vmax)
@@ -807,9 +859,11 @@ html {
     height: min(8vmin,12vmax);
     padding: min(2vmin,3vmax)
   }
+  .app__body .body-app__picture .picture__image {
+    width: min(50vmin,45vmax)
+  }
   .app__body .body-app__picture .picture__image img {
-    height: min(60vmin,35vmax);
-    max-width: min(70vmin,45vmax)
+    height: min(60vmin,35vmax)
   }
   .app__body .body-app__tokens-info p {
     font-size: min(4.25vmin,8.5vmax)
@@ -847,6 +901,16 @@ html {
   }
   .app__body {
     padding: min(12vmin,15vmax) min(2vmin,4vmax) min(2vmin,4vmax)
+  }
+  .app__body .body-app__picture .picture__blood img {
+    min-width: min(20vmin,30vmax);
+    width: min(20vmin,30vmax);
+    height: min(20vmin,30vmax)
+  }
+  .app__body .body-app__picture .picture__cursor img {
+    min-width: min(30vmin,40vmax);
+    width: min(30vmin,40vmax);
+    height: min(30vmin,40vmax)
   }
 }
 @media (min-width:640px) {
@@ -915,8 +979,21 @@ html {
   .app__body {
     padding: min(2vmin,4vmax)
   }
+  .app__body .body-app__picture .picture__blood img {
+    min-width: min(10vmin,20vmax);
+    width: min(10vmin,20vmax);
+    height: min(10vmin,20vmax)
+  }
+  .app__body .body-app__picture .picture__cursor img {
+    min-width: min(20vmin,40vmax);
+    width: min(20vmin,40vmax);
+    height: min(20vmin,40vmax)
+  }
 }
 @media (max-width:31.24875em) {
+  [class*=__container] {
+    padding: 0 min(4vmin,6vmax)
+  }
   .button {
     min-width: min(20vmin,30vmax);
     min-height: min(8vmin,20vmax)
@@ -956,10 +1033,14 @@ html {
   .app__body {
     padding: min(8vmin,6vmax) min(2vmin,4vmax) min(2vmin,4vmax)
   }
+  .app__body .body-app__picture .picture__cursor {
+    display: none
+  }
+  .app__body .body-app__picture .picture__image {
+    width: min(70vmin,60vmax)
+  }
   .app__body .body-app__picture .picture__image img {
-    height: min(75vmin,55vmax);
-    width: 100%;
-    max-width: min(70vmin,60vmax)
+    height: min(75vmin,55vmax)
   }
   .app__body .body-app__tokens-info p {
     font-size: min(6.25vmin,10.5vmax)
@@ -969,8 +1050,12 @@ html {
   }
   .sound-button {
     right: 0;
-    min-width: 3.125rem;
-    min-height: 3.125rem
+    min-width: 2.125rem;
+    min-height: 2.125rem
+  }
+  .sound-button img {
+    width: 80%;
+    height: 80%
   }
 }
 @media (min-width:20em)and (max-width:75em) {
