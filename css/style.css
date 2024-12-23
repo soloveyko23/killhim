@@ -456,9 +456,6 @@ video {
 .rounded-full {
   border-radius: 9999px
 }
-.border {
-  border-width: 1px
-}
 .bg-\[\#c7ffd8\] {
   --tw-bg-opacity: 1;
   background-color: rgb(199 255 216 / var(--tw-bg-opacity,1))
@@ -484,9 +481,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity,1))
-}
-.underline {
-  text-decoration-line: underline
 }
 .outline {
   outline-style: solid
@@ -668,7 +662,9 @@ html {
     transform: translate(2px,2px)
   }
 }
-* {
+img,
+svg {
+  pointer-events: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none
@@ -676,7 +672,6 @@ html {
 .app__header .header-app__content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 20px
 }
 .app__header .header-app__logo {
@@ -806,6 +801,51 @@ html {
   text-align: center;
   display: block
 }
+.app-roadmap {
+  width: 100%;
+  background: url(../img/roadmap-pc.png) -5% -5%/100% 100% no-repeat;
+  min-height: min(40vmin,60vmax)
+}
+.roadmap-container {
+  display: flex;
+  justify-content: space-between;
+  gap: min(3vmin,5vmax);
+  max-width: min(175vmin,120vmax);
+  margin: 0 auto;
+  height: 100%
+}
+.roadmap-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  flex: 1
+}
+.roadmap-item:nth-child(even) {
+  flex-direction: column-reverse;
+  padding-bottom: min(3vmin,4vmax)
+}
+.roadmap-item p {
+  color: #fff;
+  font-weight: 600;
+  font-size: min(2.4vmin,6vmax);
+  max-width: min(18vmin,25vmax);
+  text-align: center
+}
+.roadmap-item .circle {
+  background-color: #c7ffd8;
+  border: min(.8vmin,1.8vmax) solid #fff;
+  border-radius: 50%;
+  width: min(5vmin,7vmax);
+  height: min(5vmin,7vmax);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000b58;
+  font-weight: 700;
+  font-size: min(2.5vmin,3.5vmax)
+}
 .sound-button {
   width: min(7vmin,12vmax);
   height: min(7vmin,12vmax);
@@ -838,6 +878,9 @@ html {
   }
   .button.button-primary {
     font-size: min(2vmin,4vmax)
+  }
+  .app__header .header-app__content {
+    justify-content: space-between
   }
   .app__header .header-app__logo {
     border-radius: min(.5vmin,1vmax)
@@ -899,13 +942,16 @@ html {
   .app__content {
     display: flex
   }
-  .app__body {
+  .app__body:not(.body-app-py) {
     padding: min(12vmin,15vmax) min(2vmin,4vmax) min(2vmin,4vmax)
   }
+  .app__body.body-app-py {
+    padding: min(12vmin,15vmax) 0
+  }
   .app__body .body-app__picture .picture__blood img {
-    min-width: min(20vmin,30vmax);
-    width: min(20vmin,30vmax);
-    height: min(20vmin,30vmax)
+    min-width: min(15vmin,30vmax);
+    width: min(15vmin,30vmax);
+    height: min(15vmin,30vmax)
   }
   .app__body .body-app__picture .picture__cursor img {
     min-width: min(30vmin,40vmax);
@@ -914,6 +960,12 @@ html {
   }
 }
 @media (min-width:640px) {
+  .sm\:block {
+    display: block
+  }
+  .sm\:flex {
+    display: flex
+  }
   .sm\:gap-10 {
     gap: 2.5rem
   }
@@ -976,8 +1028,11 @@ html {
     justify-content: space-around;
     width: 100%
   }
-  .app__body {
+  .app__body:not(.body-app-py) {
     padding: min(2vmin,4vmax)
+  }
+  .app__body.body-app-py {
+    padding: min(2vmin,4vmax) 0
   }
   .app__body .body-app__picture .picture__blood img {
     min-width: min(10vmin,20vmax);
@@ -1003,6 +1058,9 @@ html {
   }
   .button.button-primary {
     font-size: min(4vmin,7vmax)
+  }
+  .app__header .header-app__content {
+    justify-content: flex-end
   }
   .app__header .header-app__wrapper {
     gap: min(4vmin,4vmax)
@@ -1030,17 +1088,17 @@ html {
     width: min(12vmin,16vmax);
     height: min(12vmin,16vmax)
   }
-  .app__body {
+  .app__body:not(.body-app-py) {
     padding: min(8vmin,6vmax) min(2vmin,4vmax) min(2vmin,4vmax)
   }
-  .app__body .body-app__picture .picture__cursor {
-    display: none
+  .app__body.body-app-py {
+    padding: min(8vmin,6vmax) 0
   }
   .app__body .body-app__picture .picture__image {
     width: min(70vmin,60vmax)
   }
   .app__body .body-app__picture .picture__image img {
-    height: min(75vmin,55vmax)
+    height: min(85vmin,65vmax)
   }
   .app__body .body-app__tokens-info p {
     font-size: min(6.25vmin,10.5vmax)

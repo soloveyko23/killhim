@@ -27,7 +27,7 @@
             logo: "./img/type-two/logo.png",
             die: "./img/type-two/die.svg",
             fright: "./img/type-two/fright.jpg",
-            default: "./img/type-two/default.svg"
+            default: "./img/type-two/default.png"
         },
         "type-three": {
             logo: "./img/type-three/logo.png",
@@ -45,7 +45,7 @@
         FALLBACK_IMAGE: "./img/default-placeholder.png",
         SHOT_SOUND: "./img/sounds/shot.mp3",
         SCARE_SOUND_INTERVAL: 1e3,
-        MAX_MOUSE_WIDTH: 500
+        MAX_MOUSE_WIDTH: 300
     };
     let currentType = Object.keys(imagePaths)[Math.floor(Math.random() * Object.keys(imagePaths).length)];
     let state = {
@@ -57,7 +57,8 @@
         scareAudio: null,
         shotAudio: new Audio(config.SHOT_SOUND),
         lastScareSoundTime: 0,
-        clickProcessing: false
+        clickProcessing: false,
+        temporaryShakeDisabled: false
     };
     const script_elements = {
         soundButton: document.querySelector(".sound-button"),
@@ -159,6 +160,7 @@
         updateSoundButtonIcon();
     };
     const handlePictureMouseMove = () => {
+        if (state.temporaryShakeDisabled) return;
         if (!state.isClicked) {
             script_elements.pictureImage.src = imagePaths[currentType].fright;
             addShakeEffect();
@@ -166,11 +168,14 @@
         }
     };
     const handlePictureMouseLeave = () => {
-        script_elements.cursor.style.opacity = "0";
         script_elements.pictureImage.src = imagePaths[currentType].default;
         stopScareSound();
         resetBloodAndCursor();
         removeShakeEffect();
+        const rect = script_elements.picture.getBoundingClientRect();
+        script_elements.cursor.style.left = `${rect.width - script_elements.cursor.offsetWidth}px`;
+        script_elements.cursor.style.top = `${rect.height - script_elements.cursor.offsetHeight}px`;
+        script_elements.cursor.style.opacity = "1";
     };
     const changeImageSmoothly = newSrc => {
         state.clickProcessing = true;
@@ -227,45 +232,61 @@
         updateTokensInfo();
         saveStateToLocalStorage();
         playShotSound();
-        removeShakeEffect();
         positionBloodAndCursor(event);
+        const rect = script_elements.picture.getBoundingClientRect();
+        const x = (event.clientX || event.touches[0].clientX) - rect.left;
+        const y = (event.clientY || event.touches[0].clientY) - rect.top;
+        script_elements.cursor.style.left = `${x - script_elements.cursor.offsetWidth / 2}px`;
+        script_elements.cursor.style.top = `${y - script_elements.cursor.offsetHeight / 2}px`;
+        script_elements.cursor.style.opacity = "1";
+        state.temporaryShakeDisabled = true;
+        removeShakeEffect();
         setTimeout((() => {
-            resetBloodAndCursor();
-            const newType = getRandomType(currentType);
-            currentType = newType;
-            setImagesForType(newType);
             setTimeout((() => {
+                resetBloodAndCursor();
+                const newType = getRandomType(currentType);
+                currentType = newType;
+                setImagesForType(newType);
                 setTimeout((() => {
-                    enableInteractions();
-                    state.clickProcessing = false;
-                }), 1e3);
-            }), config.IMAGE_RESET_DELAY);
-        }), 300);
+                    setTimeout((() => {
+                        enableInteractions();
+                        state.clickProcessing = false;
+                        state.temporaryShakeDisabled = false;
+                    }), 1e3);
+                }), config.IMAGE_RESET_DELAY);
+            }), 1e3);
+        }), 500);
     };
     const handleMouseMove = event => {
-        if (isMobileScreen()) return;
         const rect = script_elements.picture.getBoundingClientRect();
-        const x = event.clientX - rect.left - script_elements.cursor.offsetWidth / 2;
-        const y = event.clientY - rect.top - script_elements.cursor.offsetHeight / 2;
+        const x = (event.clientX || event.touches?.[0]?.clientX || 0) - rect.left - script_elements.cursor.offsetWidth / 2;
+        const y = (event.clientY || event.touches?.[0]?.clientY || 0) - rect.top - script_elements.cursor.offsetHeight / 2;
         script_elements.cursor.style.left = `${x}px`;
         script_elements.cursor.style.top = `${y}px`;
         script_elements.cursor.style.opacity = "1";
     };
     const isMobileScreen = () => window.innerWidth <= config.MAX_MOUSE_WIDTH;
     const initialize = () => {
-        preloadImages();
-        checkAndResetShots();
-        updateTokensInfo();
-        updateSoundButtonIcon();
-        setImagesForType(currentType, true);
-        script_elements.soundButton.addEventListener("click", handleSoundButtonClick);
-        if (isMobileScreen()) script_elements.picture.addEventListener("touchstart", handlePictureClick); else {
-            script_elements.picture.addEventListener("mousemove", handlePictureMouseMove);
-            script_elements.picture.addEventListener("mouseleave", handlePictureMouseLeave);
-            script_elements.picture.addEventListener("mousemove", handleMouseMove);
-            script_elements.picture.addEventListener("click", handlePictureClick);
-        }
-        script_elements.pictureImage.style.transition = `opacity ${config.FADE_DURATION}ms ease`;
+        if (script_elements.headerLogo && script_elements.headerTradeImage) {
+            script_elements.headerLogo.src = imagePaths[currentType].logo;
+            script_elements.headerTradeImage.src = imagePaths[currentType].logo;
+            console.log("Header initialized with logo and trade images.");
+        } else console.warn("Header elements (logo or trade image) are missing.");
+        if (script_elements.picture) {
+            preloadImages();
+            checkAndResetShots();
+            updateTokensInfo();
+            updateSoundButtonIcon();
+            setImagesForType(currentType, true);
+            if (isMobileScreen()) script_elements.picture.addEventListener("touchstart", handlePictureClick); else {
+                script_elements.picture.addEventListener("mousemove", handlePictureMouseMove);
+                script_elements.picture.addEventListener("mouseleave", handlePictureMouseLeave);
+                script_elements.picture.addEventListener("mousemove", handleMouseMove);
+                script_elements.picture.addEventListener("click", handlePictureClick);
+            }
+            script_elements.pictureImage.style.transition = `opacity ${config.FADE_DURATION}ms ease`;
+            script_elements.soundButton.addEventListener("click", handleSoundButtonClick);
+        } else console.warn("Element '.picture' not found. Skipping related logic.");
     };
     initialize();
     window["FLS"] = true;
