@@ -48,11 +48,6 @@
         SCARE_SOUND_INTERVAL: 1e3,
         MAX_MOUSE_WIDTH: 300
     };
-    let progressBarInterval;
-    let progress = 0;
-    let progressDuration = 3e3;
-    const progressBarContainer = document.querySelector(".progress-bar-container");
-    const progressBar = document.querySelector(".progress-bar");
     let currentType = Object.keys(imagePaths)[Math.floor(Math.random() * Object.keys(imagePaths).length)];
     let state = {
         shotsRemaining: parseInt(localStorage.getItem("shotsRemaining"), 10) || config.SHOTS_LIMIT,
@@ -76,27 +71,6 @@
         cursor: document.querySelector(".picture__cursor"),
         headerLogo: document.querySelector(".header-app__logo img"),
         headerTradeImage: document.querySelector(".header-app__trade-image img")
-    };
-    const startProgressBar = () => {
-        progressBarContainer.style.display = "block";
-        script_elements.picture.style.pointerEvents = "none";
-        progress = 0;
-        const intervalDuration = progressDuration / 100;
-        progressBarInterval = setInterval((() => {
-            progress += 1;
-            progressBar.style.width = `${progress}%`;
-            if (progress >= 100) {
-                clearInterval(progressBarInterval);
-                setTimeout((() => {
-                    progressBarContainer.style.opacity = "0";
-                    progressBar.style.width = "0%";
-                }), 200);
-                setTimeout((() => {
-                    script_elements.picture.style.pointerEvents = "auto";
-                    progressBarContainer.style.display = "none";
-                }), 500);
-            }
-        }), intervalDuration);
     };
     const preloadImages = () => {
         Object.values(imagePaths).forEach((type => {
@@ -248,7 +222,6 @@
             positionBloodAndCursor(event);
             script_elements.pictureImage.src = imagePaths[currentType].fright;
             state.isClickedOnce = true;
-            startProgressBar();
             state.shotsRemaining -= 1;
             updateTokensInfo();
             saveStateToLocalStorage();
@@ -257,28 +230,24 @@
             state.shotAudio.onended = () => {
                 const reloadAudio = new Audio(config.RELOAD_SOUND);
                 reloadAudio.play().then((() => {
-                    console.log("Reload sound played successfully");
+                    reloadAudio.onended = () => {
+                        resetBloodAndCursor();
+                        const newType = getRandomType(currentType);
+                        currentType = newType;
+                        setImagesForType(newType);
+                        setTimeout((() => {
+                            state.temporaryShakeDisabled = false;
+                            state.clickProcessing = false;
+                        }), config.IMAGE_RESET_DELAY);
+                    };
                 })).catch((err => {
                     console.error("Error playing reload sound:", err);
+                    state.clickProcessing = false;
                 }));
             };
-            setTimeout((() => {
-                setTimeout((() => {
-                    resetBloodAndCursor();
-                    const newType = getRandomType(currentType);
-                    currentType = newType;
-                    setImagesForType(newType);
-                    setTimeout((() => {
-                        setTimeout((() => {
-                            state.clickProcessing = false;
-                            state.temporaryShakeDisabled = false;
-                        }), 1e3);
-                    }), config.IMAGE_RESET_DELAY);
-                }), 1e3);
-            }), 500);
         } else {
-            console.log("Выстрелы закончились на сегодня!");
             alert("Выстрелы закончились на сегодня!");
+            state.clickProcessing = false;
         }
     };
     const handleMouseMove = event => {
@@ -291,7 +260,6 @@
     };
     const isMobileScreen = () => window.innerWidth <= config.MAX_MOUSE_WIDTH;
     const initialize = () => {
-        progressBarContainer.style.display = "none";
         if (script_elements.headerLogo && script_elements.headerTradeImage) {
             script_elements.headerLogo.src = imagePaths[currentType].logo;
             script_elements.headerTradeImage.src = imagePaths[currentType].logo;

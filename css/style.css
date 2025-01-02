@@ -763,7 +763,7 @@ svg {
   text-align: center
 }
 .app__body .body-app__header p {
-  font-size: min(4.75vmin,8.5vmax);
+  font-size: min(3.75vmin,7.5vmax);
   color: #fff;
   font-weight: 600
 }
@@ -772,7 +772,7 @@ svg {
   text-transform: uppercase
 }
 .app__body .body-app__header h1 {
-  font-size: min(8.5vmin,16vmax);
+  font-size: min(7.5vmin,15vmax);
   font-weight: 700;
   color: #fff
 }
@@ -822,8 +822,9 @@ svg {
 }
 .app-roadmap {
   width: 100%;
-  background: url(../img/roadmap-pc.png) -5% -5%/100% 100% no-repeat;
-  min-height: min(40vmin,60vmax)
+  background: url(../img/roadmap-pc.png) -5% -5%/100% no-repeat;
+  min-height: min(40vmin,60vmax);
+  min-width: 1400px
 }
 .roadmap-container {
   display: flex;
@@ -884,6 +885,45 @@ svg {
 .sound-button:active {
   background-color: #61ff91
 }
+.timer {
+  position: relative;
+  width: 100px;
+  height: 100px
+}
+.timer svg {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg)
+}
+.timer circle {
+  fill: none;
+  stroke-width: 4
+}
+.timer circle:first-of-type {
+  stroke: rgba(199,255,216,.2)
+}
+#progress {
+  stroke: #c7ffd8;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1s linear
+}
+#countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: min(3.5vmin,8vmax);
+  color: #fff
+}
 @media (min-width:31.24875em) {
   [class*=__container] {
     padding: 0 min(2vmin,2vmax)
@@ -905,27 +945,27 @@ svg {
     border-radius: min(.5vmin,1vmax)
   }
   .app__header .header-app__logo img {
-    width: min(7vmin,12vmax);
-    height: min(7vmin,12vmax)
+    width: min(6vmin,12vmax);
+    height: min(6vmin,12vmax)
   }
   .app__header .header-app__trade-image {
-    width: min(7vmin,10vmax);
-    min-width: min(7vmin,10vmax);
-    height: min(7vmin,10vmax)
+    width: min(6vmin,10vmax);
+    min-width: min(6vmin,10vmax);
+    height: min(6vmin,10vmax)
   }
   .app__header .header-app__trade p {
-    font-size: min(2vmin,4vmax)
+    font-size: min(1.75vmin,3vmax)
   }
   .app__sidebar .sidebar-app__content ul a {
-    width: min(8vmin,12vmax);
-    height: min(8vmin,12vmax);
+    width: min(7.25vmin,12vmax);
+    height: min(7.25vmin,12vmax);
     padding: min(2vmin,3vmax)
   }
   .app__body .body-app__picture .picture__image {
     width: min(50vmin,45vmax)
   }
   .app__body .body-app__picture .picture__image img {
-    height: min(60vmin,35vmax)
+    height: min(55vmin,35vmax)
   }
   .app__body .body-app__tokens-info p {
     font-size: min(4.25vmin,8.5vmax)
@@ -1042,6 +1082,12 @@ svg {
     width: 100%;
     padding: min(.5vmin,1vmax);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.45)
+  }
+  .app__sidebar .sidebar-app__content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly
   }
   .app__sidebar .sidebar-app__content ul {
     justify-content: space-around;
