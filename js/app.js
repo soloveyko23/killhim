@@ -44,9 +44,15 @@
         SOUND_DELAY: 500,
         FALLBACK_IMAGE: "./img/default-placeholder.png",
         SHOT_SOUND: "./img/sounds/shot.mp3",
+        RELOAD_SOUND: "./img/sounds/reload.mp3",
         SCARE_SOUND_INTERVAL: 1e3,
         MAX_MOUSE_WIDTH: 300
     };
+    let progressBarInterval;
+    let progress = 0;
+    let progressDuration = 3e3;
+    const progressBarContainer = document.querySelector(".progress-bar-container");
+    const progressBar = document.querySelector(".progress-bar");
     let currentType = Object.keys(imagePaths)[Math.floor(Math.random() * Object.keys(imagePaths).length)];
     let state = {
         shotsRemaining: parseInt(localStorage.getItem("shotsRemaining"), 10) || config.SHOTS_LIMIT,
@@ -58,6 +64,7 @@
         shotAudio: new Audio(config.SHOT_SOUND),
         lastScareSoundTime: 0,
         clickProcessing: false,
+        isClickedOnce: false,
         temporaryShakeDisabled: false
     };
     const script_elements = {
@@ -69,6 +76,27 @@
         cursor: document.querySelector(".picture__cursor"),
         headerLogo: document.querySelector(".header-app__logo img"),
         headerTradeImage: document.querySelector(".header-app__trade-image img")
+    };
+    const startProgressBar = () => {
+        progressBarContainer.style.display = "block";
+        script_elements.picture.style.pointerEvents = "none";
+        progress = 0;
+        const intervalDuration = progressDuration / 100;
+        progressBarInterval = setInterval((() => {
+            progress += 1;
+            progressBar.style.width = `${progress}%`;
+            if (progress >= 100) {
+                clearInterval(progressBarInterval);
+                setTimeout((() => {
+                    progressBarContainer.style.opacity = "0";
+                    progressBar.style.width = "0%";
+                }), 200);
+                setTimeout((() => {
+                    script_elements.picture.style.pointerEvents = "auto";
+                    progressBarContainer.style.display = "none";
+                }), 500);
+            }
+        }), intervalDuration);
     };
     const preloadImages = () => {
         Object.values(imagePaths).forEach((type => {
@@ -105,9 +133,10 @@
         const soundIcon = state.soundMuted ? "charm_sound-mute.svg" : "charm_sound-down.svg";
         script_elements.soundButton.querySelector("img").src = `./img/${soundIcon}`;
     };
+    const isTouchScreen = () => "ontouchstart" in window || navigator.maxTouchPoints > 0;
     const playScareSound = () => {
         const currentTime = Date.now();
-        if (currentTime - state.lastScareSoundTime < config.SCARE_SOUND_INTERVAL || isMobileScreen()) return;
+        if (currentTime - state.lastScareSoundTime < config.SCARE_SOUND_INTERVAL || isMobileScreen() || isTouchScreen()) return;
         state.lastScareSoundTime = currentTime;
         if (state.soundMuted || state.scareSoundPlaying) return;
         state.scareAudio = new Audio("./img/sounds/ispugannoe-dyihanie.mp3");
@@ -147,7 +176,7 @@
         setTimeout((() => {
             script_elements.blood.style.opacity = "0";
             script_elements.cursor.style.opacity = "0";
-        }), 100);
+        }), 0);
     };
     const addShakeEffect = () => {
         script_elements.pictureImage.classList.add("shake");
@@ -168,6 +197,7 @@
         }
     };
     const handlePictureMouseLeave = () => {
+        if (state.isClickedOnce) return;
         script_elements.pictureImage.src = imagePaths[currentType].default;
         stopScareSound();
         resetBloodAndCursor();
@@ -210,52 +240,46 @@
             script_elements.pictureImage.style.transition = `opacity ${config.FADE_DURATION}ms ease`;
         }), 50);
     };
-    const disableInteractions = () => {
-        script_elements.picture.removeEventListener("click", handlePictureClick);
-        script_elements.picture.removeEventListener("touchstart", handlePictureClick);
-    };
-    const enableInteractions = () => {
-        script_elements.picture.addEventListener("click", handlePictureClick);
-        script_elements.picture.addEventListener("touchstart", handlePictureClick);
-    };
     const handlePictureClick = event => {
         if (state.clickProcessing) return;
-        disableInteractions();
         state.clickProcessing = true;
-        if (state.shotsRemaining <= 0) {
-            alert("You have no shots remaining today!");
-            enableInteractions();
-            state.clickProcessing = false;
-            return;
-        }
-        state.shotsRemaining -= 1;
-        updateTokensInfo();
-        saveStateToLocalStorage();
-        playShotSound();
-        positionBloodAndCursor(event);
-        const rect = script_elements.picture.getBoundingClientRect();
-        const x = (event.clientX || event.touches[0].clientX) - rect.left;
-        const y = (event.clientY || event.touches[0].clientY) - rect.top;
-        script_elements.cursor.style.left = `${x - script_elements.cursor.offsetWidth / 2}px`;
-        script_elements.cursor.style.top = `${y - script_elements.cursor.offsetHeight / 2}px`;
-        script_elements.cursor.style.opacity = "1";
-        state.temporaryShakeDisabled = true;
-        removeShakeEffect();
-        setTimeout((() => {
+        if (state.shotsRemaining > 0) {
+            playShotSound();
+            positionBloodAndCursor(event);
+            script_elements.pictureImage.src = imagePaths[currentType].fright;
+            state.isClickedOnce = true;
+            startProgressBar();
+            state.shotsRemaining -= 1;
+            updateTokensInfo();
+            saveStateToLocalStorage();
+            state.temporaryShakeDisabled = true;
+            removeShakeEffect();
+            state.shotAudio.onended = () => {
+                const reloadAudio = new Audio(config.RELOAD_SOUND);
+                reloadAudio.play().then((() => {
+                    console.log("Reload sound played successfully");
+                })).catch((err => {
+                    console.error("Error playing reload sound:", err);
+                }));
+            };
             setTimeout((() => {
-                resetBloodAndCursor();
-                const newType = getRandomType(currentType);
-                currentType = newType;
-                setImagesForType(newType);
                 setTimeout((() => {
+                    resetBloodAndCursor();
+                    const newType = getRandomType(currentType);
+                    currentType = newType;
+                    setImagesForType(newType);
                     setTimeout((() => {
-                        enableInteractions();
-                        state.clickProcessing = false;
-                        state.temporaryShakeDisabled = false;
-                    }), 1e3);
-                }), config.IMAGE_RESET_DELAY);
-            }), 1e3);
-        }), 500);
+                        setTimeout((() => {
+                            state.clickProcessing = false;
+                            state.temporaryShakeDisabled = false;
+                        }), 1e3);
+                    }), config.IMAGE_RESET_DELAY);
+                }), 1e3);
+            }), 500);
+        } else {
+            console.log("Выстрелы закончились на сегодня!");
+            alert("Выстрелы закончились на сегодня!");
+        }
     };
     const handleMouseMove = event => {
         const rect = script_elements.picture.getBoundingClientRect();
@@ -267,11 +291,11 @@
     };
     const isMobileScreen = () => window.innerWidth <= config.MAX_MOUSE_WIDTH;
     const initialize = () => {
+        progressBarContainer.style.display = "none";
         if (script_elements.headerLogo && script_elements.headerTradeImage) {
             script_elements.headerLogo.src = imagePaths[currentType].logo;
             script_elements.headerTradeImage.src = imagePaths[currentType].logo;
-            console.log("Header initialized with logo and trade images.");
-        } else console.warn("Header elements (logo or trade image) are missing.");
+        }
         if (script_elements.picture) {
             preloadImages();
             checkAndResetShots();
